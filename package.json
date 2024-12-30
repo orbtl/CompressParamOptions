@@ -1,0 +1,31 @@
+{
+  "name": "compress-param-options",
+  "version": "0.1.0",
+  "description": "Compress large amounts of URL param options for shareable links",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified'; false"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orbtl/CompressParamOptions.git"
+  },
+  "keywords": [
+    "url",
+    "compress",
+    "compression",
+    "encode",
+    "encoding",
+    "params",
+    "param",
+    "parameter",
+    "parameters",
+    "options"
+  ],
+  "author": "Jake Sklarew (@orbtl)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/orbtl/CompressParamOptions/issues"
+  },
+  "homepage": "https://github.com/orbtl/CompressParamOptions#readme"
+}
