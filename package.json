@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Compress large amounts of URL param options for shareable links",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo 'Error: no test specified'; false"
   },

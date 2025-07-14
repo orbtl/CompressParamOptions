@@ -3,8 +3,9 @@
   This implementation compresses options into a more compact form using a URL-safe character set.
 */
 
-const safeCharacters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_.';
-const characterBitDepth = safeCharacters.length;
+const safeCharacters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
+const characterBitDepth = 6; // 2^6 = 64, which is the number of safe characters we have
+
 const characterMap = {};
 for (let i = 0; i < safeCharacters.length; i++) {
   characterMap[safeCharacters[i]] = i;
@@ -16,7 +17,7 @@ const separationCharacter = ',';
 function binaryToCharacter(binaryString) {
   let intValue = parseInt(binaryString, 2);
   // For safety, ensure the value is within the range of safe characters
-  return safeCharacters[intValue % characterBitDepth];
+  return safeCharacters[intValue % safeCharacters.length];
 }
 
 function characterToBinary(character) {
@@ -60,7 +61,7 @@ export const compressOptions = (
   }
 
   // Handle options in selectedOptions that do not exist in the optionMap and can't be compressed
-  const uncaughtOptions = selectedOptions.filter(o => !Object.values(objectMap).includes(o));
+  const uncaughtOptions = selectedOptions.filter(o => !Object.values(optionMap).includes(o));
   if (uncaughtOptions.length > 0) {
     if (warnOnUncompressed) {
       console.warn('The following options are not in the optionMap and cannot be compressed:', uncaughtOptions);
@@ -95,7 +96,7 @@ export const decompressOptions = (
     if (compressed[compressedIterator] === separationCharacter) {
       // Move past the separation character
       compressedIterator++;
-      const uncaughtOption = '';
+      let uncaughtOption = '';
 
       // Iterate, storing characters making up this uncaught option,
       // until we reach another separation character or the end of the string
