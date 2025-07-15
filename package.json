@@ -1,6 +1,6 @@
 {
   "name": "compress-param-options",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Compress large amounts of URL param options for shareable links",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
