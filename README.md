@@ -50,7 +50,7 @@ Example using the String Keys option map from above:
 ```
 const selectedOptions = ['size-small', 'temperature-cold'];
 const compressedOptions = compressOptions(stringOptionMap, selectedOptions);
-console.log(compressedOptions); // Result: 6
+console.log(compressedOptions); // Result: '6'
 ```
 
 ### Decompression
@@ -61,6 +61,8 @@ Example using the above compression:
 const decompressedOptions = decompressOptions(stringOptionMap, compressedOptions);
 console.log(decompressedOptions); // Result: [ 'size-small', 'temperature-cold' ]
 ```
+## Building Locally
+If you wish to contribute or test things locally, run `npm run build` and the compiled files will be output into the `/dist` directory.
 
-## Examples
+### Examples
 Try running `node ./dist/quickExamples.js` after building to see some examples of what the compression looks like.
