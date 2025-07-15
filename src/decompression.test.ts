@@ -12,7 +12,7 @@ describe('decompressOptions', () => {
     };
 
     it('should decompress correctly', () => {
-      const compressed = 'K'; // Binary: 1010 -> ['value1', 'value3']
+      const compressed = 'A'; // Binary: 1010 -> ['value1', 'value3']
       const result = decompressOptions(stringOptions, compressed);
       expect(result).toEqual(['value1', 'value3']);
     });
@@ -24,7 +24,7 @@ describe('decompressOptions', () => {
     });
 
     it('should handle all options selected', () => {
-      const compressed = 'P'; // Binary: 1111 -> all values
+      const compressed = 'F'; // Binary: 1111 -> all values
       const result = decompressOptions(stringOptions, compressed);
       expect(result).toEqual(['value1', 'value2', 'value3', 'value4']);
     });
@@ -61,7 +61,7 @@ describe('decompressOptions', () => {
     };
 
     it('should decompress correctly', () => {
-      const compressed = 'K'; // Binary: 1010 -> ['feature_a', 'feature_c']
+      const compressed = 'A'; // Binary: 1010 -> ['feature_a', 'feature_c']
       const result = decompressOptions(numberOptions, compressed);
       expect(result).toEqual(['feature_a', 'feature_c']);
     });
@@ -73,7 +73,7 @@ describe('decompressOptions', () => {
     });
 
     it('should handle all options selected', () => {
-      const compressed = 'P'; // Binary: 1111 -> all values
+      const compressed = 'F'; // Binary: 1111 -> all values
       const result = decompressOptions(numberOptions, compressed);
       expect(result).toEqual(['feature_a', 'feature_b', 'feature_c', 'feature_d']);
     });
@@ -83,7 +83,7 @@ describe('decompressOptions', () => {
     const arrayOptions: ArrayOptionMap = ['red', 'blue', 'green', 'yellow'];
 
     it('should decompress correctly', () => {
-      const compressed = 'K'; // Binary: 1010 -> ['red', 'green']
+      const compressed = 'A'; // Binary: 1010 -> ['red', 'green']
       const result = decompressOptions(arrayOptions, compressed);
       expect(result).toEqual(['red', 'green']);
     });
@@ -95,7 +95,7 @@ describe('decompressOptions', () => {
     });
 
     it('should handle all options selected', () => {
-      const compressed = 'P'; // Binary: 1111 -> all values
+      const compressed = 'F'; // Binary: 1111 -> all values
       const result = decompressOptions(arrayOptions, compressed);
       expect(result).toEqual(['red', 'blue', 'green', 'yellow']);
     });
@@ -110,10 +110,10 @@ describe('decompressOptions', () => {
   describe('Large option sets', () => {
     it('should handle options that span multiple characters', () => {
       const largeOptions: StringOptionMap = {};
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 100; i++) {
         largeOptions[`option${i}`] = `value${i}`;
       }
-      
+
       // This should be a multi-character compression
       const compressed = '80G'; // Represents specific pattern across multiple chars
       const result = decompressOptions(largeOptions, compressed);
@@ -125,9 +125,9 @@ describe('decompressOptions', () => {
       for (let i = 0; i < 100; i++) {
         veryLargeOptions[i] = `feature_${i}`;
       }
-      
+
       // Test with a simple pattern that we know should work
-      const compressed = '8'; // Should represent the first option
+      const compressed = 'W'; // Should represent the first option, which would be '100000'
       const result = decompressOptions(veryLargeOptions, compressed);
       expect(result).toContain('feature_0');
     });
@@ -142,22 +142,22 @@ describe('decompressOptions', () => {
     });
 
     it('should warn about undefined values', () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
       const options: StringOptionMap = {
         'option1': 'value1',
         'option2': 'value2'
       };
-      
+
       // Force a scenario where we might get undefined values
       const compressed = 'P'; // This might try to access more options than exist
       decompressOptions(options, compressed);
-      
+
       consoleSpy.mockRestore();
     });
 
     it('should handle single character options', () => {
       const singleOption: StringOptionMap = { 'a': 'value1' };
-      const compressed = '8'; // Binary: 1000 -> should select first option
+      const compressed = '1'; // Binary: 1 -> should select first option
       const result = decompressOptions(singleOption, compressed);
       expect(result).toEqual(['value1']);
     });

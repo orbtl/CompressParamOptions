@@ -68,7 +68,7 @@ function compressCore(
  * const options = { a: 'option1', b: 'option2', c: 'option3' };
  * const selected = ['option1', 'option3'];
  * const compressed = compressOptions(options, selected);
- * console.log(compressed); // Returns a compact string like "K"
+ * console.log(compressed); // Returns a compact string like "A"
  * ```
  */
 export function compressOptions(
@@ -92,7 +92,7 @@ export function compressOptions(
  * const features = { 1: 'feature_a', 2: 'feature_b', 3: 'feature_c' };
  * const selected = ['feature_a', 'feature_c'];
  * const compressed = compressOptions(features, selected);
- * console.log(compressed); // Returns a compact string like "K"
+ * console.log(compressed); // Returns a compact string like "A"
  * ```
  */
 export function compressOptions(
@@ -116,7 +116,7 @@ export function compressOptions(
  * const colors = ['red', 'blue', 'green', 'yellow'];
  * const selected = ['red', 'green'];
  * const compressed = compressOptions(colors, selected);
- * console.log(compressed); // Returns a compact string like "K"
+ * console.log(compressed); // Returns a compact string like "A"
  * ```
  */
 export function compressOptions(

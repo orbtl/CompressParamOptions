@@ -14,7 +14,7 @@ describe('compressOptions', () => {
     it('should compress selected options correctly', () => {
       const selected = ['value1', 'value3'];
       const result = compressOptions(stringOptions, selected);
-      expect(result).toBe('K'); // Binary: 1010 -> 10 (padded) -> 'K'
+      expect(result).toBe('A'); // Binary: 1010 -> 10 (decimal) -> 'A'
     });
 
     it('should handle empty selection', () => {
@@ -26,13 +26,13 @@ describe('compressOptions', () => {
     it('should handle all options selected', () => {
       const selected = ['value1', 'value2', 'value3', 'value4'];
       const result = compressOptions(stringOptions, selected);
-      expect(result).toBe('P'); // Binary: 1111 -> 15 -> 'P'
+      expect(result).toBe('F'); // Binary: 1111 -> 15 (decimal) -> 'F'
     });
 
     it('should handle uncompressed options when includeUncompressed is true', () => {
       const selected = ['value1', 'unknown_option'];
       const result = compressOptions(stringOptions, selected, true, false);
-      expect(result).toBe('8,unknown_option'); // Binary: 1000 -> 8 -> '8', then separator and unknown option
+      expect(result).toBe('8,unknown_option'); // Binary: 1000 -> 8 (decimal) -> '8', then separator and unknown option
     });
 
     it('should warn about uncompressed options when warnOnUncompressed is true', () => {
@@ -66,7 +66,7 @@ describe('compressOptions', () => {
     it('should compress selected options correctly', () => {
       const selected = ['feature_a', 'feature_c'];
       const result = compressOptions(numberOptions, selected);
-      expect(result).toBe('K'); // Binary: 1010 -> 10 -> 'K'
+      expect(result).toBe('A'); // Binary: 1010 -> 10 (decimal) -> 'A'
     });
 
     it('should handle empty selection', () => {
@@ -78,7 +78,7 @@ describe('compressOptions', () => {
     it('should handle all options selected', () => {
       const selected = ['feature_a', 'feature_b', 'feature_c', 'feature_d'];
       const result = compressOptions(numberOptions, selected);
-      expect(result).toBe('P'); // Binary: 1111 -> 15 -> 'P'
+      expect(result).toBe('F'); // Binary: 1111 -> 15 (decimal) -> 'F'
     });
   });
 
@@ -88,7 +88,7 @@ describe('compressOptions', () => {
     it('should compress selected options correctly', () => {
       const selected = ['red', 'green'];
       const result = compressOptions(arrayOptions, selected);
-      expect(result).toBe('K'); // Binary: 1010 -> 10 -> 'K'
+      expect(result).toBe('A'); // Binary: 1010 -> 10 (decimal) -> 'A'
     });
 
     it('should handle empty selection', () => {
@@ -100,13 +100,13 @@ describe('compressOptions', () => {
     it('should handle all options selected', () => {
       const selected = ['red', 'blue', 'green', 'yellow'];
       const result = compressOptions(arrayOptions, selected);
-      expect(result).toBe('P'); // Binary: 1111 -> 15 -> 'P'
+      expect(result).toBe('F'); // Binary: 1111 -> 15 (decimal) -> 'F'
     });
 
     it('should handle uncompressed options', () => {
       const selected = ['red', 'purple'];
       const result = compressOptions(arrayOptions, selected, true, false);
-      expect(result).toBe('8,purple'); // Binary: 1000 -> 8 -> '8', then separator and unknown option
+      expect(result).toBe('8,purple'); // Binary: 1000 -> 8 (decimal) -> '8', then separator and unknown option
     });
   });
 
