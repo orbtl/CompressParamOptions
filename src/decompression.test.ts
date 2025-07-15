@@ -114,10 +114,12 @@ describe('decompressOptions', () => {
         largeOptions[`option${i}`] = `value${i}`;
       }
 
-      // This should be a multi-character compression
-      const compressed = '80G'; // Represents specific pattern across multiple chars
+      // Test with a valid multi-character compression
+      // Use a pattern that should work with 100 options
+      const compressed = '80'; // First char represents first 6 options, second char represents next 6
       const result = decompressOptions(largeOptions, compressed);
       expect(result).toBeInstanceOf(Array);
+      expect(result.length).toBeGreaterThan(0);
     });
 
     it('should handle very large option sets', () => {
@@ -127,7 +129,8 @@ describe('decompressOptions', () => {
       }
 
       // Test with a simple pattern that we know should work
-      const compressed = 'W'; // Should represent the first option, which would be '100000'
+      // 'W' is index 32, binary 100000 (6 bits) - should select first option
+      const compressed = 'W'; // Should represent the first option
       const result = decompressOptions(veryLargeOptions, compressed);
       expect(result).toContain('feature_0');
     });
@@ -141,18 +144,14 @@ describe('decompressOptions', () => {
       }).toThrow('Character ! is not a valid character.');
     });
 
-    it('should warn about undefined values', () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
-      const options: StringOptionMap = {
-        'option1': 'value1',
-        'option2': 'value2'
-      };
-
-      // Force a scenario where we might get undefined values
-      const compressed = 'P'; // This might try to access more options than exist
-      decompressOptions(options, compressed);
-
-      consoleSpy.mockRestore();
+    it('should throw error for negative offset (invalid compressed string)', () => {
+      const options: StringOptionMap = { 'a': 'value1' };
+      expect(() => {
+        // Using a character that would result in a negative offset
+        // Character '_' is index 63, which in binary is 111111 (6 bits)
+        // For a single option, this would create a negative offset
+        decompressOptions(options, '_');
+      }).toThrow('Offset -5 is negative, indicating an invalid compressed string or option map.');
     });
 
     it('should handle single character options', () => {
@@ -160,6 +159,15 @@ describe('decompressOptions', () => {
       const compressed = '1'; // Binary: 1 -> should select first option
       const result = decompressOptions(singleOption, compressed);
       expect(result).toEqual(['value1']);
+    });
+
+    it('should handle compressed strings that are too large for small option maps', () => {
+      const smallOptions: StringOptionMap = { 'a': 'value1', 'b': 'value2' };
+      expect(() => {
+        // Character 'z' is index 61, binary 111101 (6 bits)
+        // For only 2 options, this would create invalid offset
+        decompressOptions(smallOptions, 'z');
+      }).toThrow('Offset -4 is negative, indicating an invalid compressed string or option map.');
     });
   });
 });

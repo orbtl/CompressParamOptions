@@ -47,7 +47,9 @@ function decompressCore(
     // But first have to make sure there are that many entries left in the map
     const lengthLeftInMap = keys.length - (compressedIterator * characterBitDepth);
     const offset = Math.min(characterBitDepth, lengthLeftInMap) - binaryString.length;
-    console.log('Offset:', offset, 'Length left in map:', lengthLeftInMap, 'CharacterBitDepth', characterBitDepth, 'Binary string:', binaryString);
+    if (offset < 0) {
+      throw new Error(`Offset ${offset} is negative, indicating an invalid compressed string or option map.`);
+    }
 
     for (let binaryIterator = 0; binaryIterator < binaryString.length; binaryIterator++) {
       // Do not need to determine which option we are looking for if the binary digit is 0 indicating false
