@@ -1,5 +1,5 @@
 import { compressOptions, decompressOptions } from './index.js';
-import type { OptionMap, SelectedOptions } from './types/index.js';
+import type { OptionMap, SelectedOptions } from './types/types.js';
 
 console.log('=== EXAMPLE 1: User Preferences (50 options) ===');
 const userPreferences: OptionMap = {
