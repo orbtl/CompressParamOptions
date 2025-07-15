@@ -1,8 +1,8 @@
 import { compressOptions, decompressOptions } from './index.js';
-import type { OptionMap, SelectedOptions } from './types/types.js';
+import type { StringOptionMap, NumberOptionMap, ArrayOptionMap, SelectedOptions } from './types/types.js';
 
 console.log('=== EXAMPLE 1: User Preferences (50 options) ===');
-const userPreferences: OptionMap = {
+const userPreferences: StringOptionMap = {
   'darkMode': 'dark_mode',
   'notifications': 'enable_notifications',
   'autoSave': 'auto_save',
@@ -71,9 +71,9 @@ console.log('Decompressed correctly:', JSON.stringify(selectedUserPrefs.sort()) 
 console.log('');
 
 console.log('=== EXAMPLE 2: Feature Flags (100 options) ===');
-const featureFlags: OptionMap = {};
+const featureFlags: NumberOptionMap = {};
 for (let i = 1; i <= 100; i++) {
-  featureFlags[`feature${i}`] = `FEATURE_${i}_ENABLED`;
+  featureFlags[i] = `FEATURE_${i}_ENABLED`;
 }
 
 const enabledFeatures: SelectedOptions = [
@@ -90,7 +90,7 @@ console.log('Decompressed correctly:', JSON.stringify(enabledFeatures.sort()) ==
 console.log('');
 
 console.log('=== EXAMPLE 3: Permission System (75 options) ===');
-const permissions: OptionMap = {
+const permissions: StringOptionMap = {
   'readUsers': 'user:read',
   'writeUsers': 'user:write',
   'deleteUsers': 'user:delete',
@@ -184,7 +184,7 @@ console.log('Decompressed correctly:', JSON.stringify(userPermissions.sort()) ==
 console.log('');
 
 console.log('=== EXAMPLE 4: E-commerce Filters (120 options) ===');
-const productFilters: OptionMap = {};
+const productFilters: StringOptionMap = {};
 const categories: string[] = ['electronics', 'clothing', 'home', 'sports', 'books', 'toys', 'automotive', 'health'];
 const brands: string[] = ['apple', 'samsung', 'nike', 'adidas', 'sony', 'lg', 'canon', 'dell', 'hp', 'lenovo'];
 const colors: string[] = ['red', 'blue', 'green', 'black', 'white', 'gray', 'yellow', 'purple', 'orange', 'pink'];
@@ -230,7 +230,7 @@ console.log('Decompressed correctly:', JSON.stringify(selectedFilters.sort()) ==
 console.log('');
 
 console.log('=== EXAMPLE 5: With Uncompressed Options ===');
-const basicOptions: OptionMap = {
+const basicOptions: StringOptionMap = {
   'opt1': 'option_one',
   'opt2': 'option_two',
   'opt3': 'option_three',
@@ -245,6 +245,20 @@ console.log('Decompressed mixed:', decompressedMixed);
 console.log('Decompressed correctly:', JSON.stringify(mixedSelection.sort()) === JSON.stringify(decompressedMixed.sort()));
 console.log('');
 
+console.log('=== EXAMPLE 6: Array Option Map (Simple List) ===');
+const colorOptions: ArrayOptionMap = [
+  'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'black', 'white', 'gray',
+  'brown', 'cyan', 'magenta', 'lime', 'indigo', 'violet', 'maroon', 'navy', 'olive', 'teal'
+];
+
+const selectedColors: SelectedOptions = ['red', 'blue', 'green', 'black', 'white'];
+const compressedColors: string = compressOptions(colorOptions, selectedColors);
+console.log('Selected colors:', selectedColors.length, 'out of', colorOptions.length);
+console.log('Compressed colors:', compressedColors, '(length:', compressedColors.length, ')');
+const decompressedColors: SelectedOptions = decompressOptions(colorOptions, compressedColors);
+console.log('Decompressed correctly:', JSON.stringify(selectedColors.sort()) === JSON.stringify(decompressedColors.sort()));
+console.log('');
+
 console.log('=== COMPRESSION EFFICIENCY COMPARISON ===');
 interface TestCase {
   name: string;
@@ -257,7 +271,8 @@ const testCases: TestCase[] = [
   { name: 'User Preferences', options: Object.keys(userPreferences).length, selected: selectedUserPrefs.length, compressed: compressedPrefs.length },
   { name: 'Feature Flags', options: Object.keys(featureFlags).length, selected: enabledFeatures.length, compressed: compressedFeatures.length },
   { name: 'Permissions', options: Object.keys(permissions).length, selected: userPermissions.length, compressed: compressedPermissions.length },
-  { name: 'Product Filters', options: Object.keys(productFilters).length, selected: selectedFilters.length, compressed: compressedFilters.length }
+  { name: 'Product Filters', options: Object.keys(productFilters).length, selected: selectedFilters.length, compressed: compressedFilters.length },
+  { name: 'Color Options', options: colorOptions.length, selected: selectedColors.length, compressed: compressedColors.length }
 ];
 
 testCases.forEach(tc => {
