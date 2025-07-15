@@ -1,5 +1,5 @@
-import { compressOptions, decompressOptions } from './index.js';
-import type { StringOptionMap, NumberOptionMap, ArrayOptionMap, SelectedOptions } from './types/types.js';
+import { compressOptions, decompressOptions } from './index';
+import type { StringOptionMap, NumberOptionMap, ArrayOptionMap, SelectedOptions } from './types/types';
 
 console.log('=== EXAMPLE 1: User Preferences (50 options) ===');
 const userPreferences: StringOptionMap = {
