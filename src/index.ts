@@ -3,10 +3,15 @@
   This implementation compresses options into a more compact form using a URL-safe character set.
 */
 
+import type { OptionMap, SelectedOptions } from './types/index.js';
+
+// Internal type definitions
+type CharacterMap = Record<string, number>;
+
 const safeCharacters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
 const characterBitDepth = 6; // 2^6 = 64, which is the number of safe characters we have
 
-const characterMap = {};
+const characterMap: CharacterMap = {};
 for (let i = 0; i < safeCharacters.length; i++) {
   characterMap[safeCharacters[i]] = i;
 }
@@ -14,13 +19,13 @@ for (let i = 0; i < safeCharacters.length; i++) {
 // For the purposes of options that are not in the map, we need a separation character to indicate
 const separationCharacter = ',';
 
-function binaryToCharacter(binaryString) {
-  let intValue = parseInt(binaryString, 2);
+function binaryToCharacter(binaryString: string): string {
+  const intValue = parseInt(binaryString, 2);
   // For safety, ensure the value is within the range of safe characters
   return safeCharacters[intValue % safeCharacters.length];
 }
 
-function characterToBinary(character) {
+function characterToBinary(character: string): string {
   const index = characterMap[character];
   if (index === undefined) {
     throw new Error(`Character ${character} is not a valid character.`);
@@ -31,11 +36,11 @@ function characterToBinary(character) {
 }
 
 export const compressOptions = (
-  optionMap,
-  selectedOptions,
-  includeUncompressed = false,
-  warnOnUncompressed = true
-) => {
+  optionMap: OptionMap,
+  selectedOptions: SelectedOptions,
+  includeUncompressed: boolean = false,
+  warnOnUncompressed: boolean = true
+): string => {
 
   if (typeof selectedOptions === 'undefined'
     || selectedOptions === null
@@ -78,16 +83,15 @@ export const compressOptions = (
 
 
 export const decompressOptions = (
-  optionMap,
-  compressed
-) => {
-  if (typeof compressed !== 'string'
-    && !(compressed instanceof String)) {
+  optionMap: OptionMap,
+  compressed: string
+): SelectedOptions => {
+  if (typeof compressed !== 'string') {
     return [];
   }
 
   const optionMapKeys = Object.keys(optionMap);
-  const decompressed = [];
+  const decompressed: SelectedOptions = [];
 
   let compressedIterator = 0;
   while (compressedIterator < compressed.length) {
