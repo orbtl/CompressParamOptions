@@ -9,8 +9,9 @@
   ],
   "type": "module",
   "scripts": {
-    "test": "echo 'Error: no test specified'; false",
-    "build": "tsc"
+    "test": "vitest",
+    "build": "tsc",
+    "ci": "npm run build && npm run test"
   },
   "repository": {
     "type": "git",
