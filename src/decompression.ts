@@ -6,9 +6,12 @@ function characterToBinary(character: string): string {
   if (index === undefined) {
     throw new Error(`Character ${character} is not a valid character.`);
   }
-  // Note that we don't pad the start here,
-  // As we need to ensure there are that many options left in the option map before padding
-  return index.toString(2);
+
+  // Convert to binary and pad with zeros to ensure consistent bit depth
+  // Note that unlike compression, during decompression we pad the start
+  // because we are rebuilding from an index that might be too small to include leading digits,
+  // such as '001000' which would return as '1000' if we didn't pad
+  return index.toString(2).padStart(characterBitDepth, '0');
 }
 
 // Shared decompression logic
@@ -42,15 +45,6 @@ function decompressCore(
     // Convert from url safe character to binary string
     const binaryString = characterToBinary(compressed[compressedIterator]);
 
-    // If the value is too low we might not end up with our full bit depth
-    // Pad with any missing length of characters by using an offset when we calculate our option index
-    // But first have to make sure there are that many entries left in the map
-    const lengthLeftInMap = keys.length - (compressedIterator * characterBitDepth);
-    const offset = Math.min(characterBitDepth, lengthLeftInMap) - binaryString.length;
-    if (offset < 0) {
-      throw new Error(`Offset ${offset} is negative, indicating an invalid compressed string or option map.`);
-    }
-
     for (let binaryIterator = 0; binaryIterator < binaryString.length; binaryIterator++) {
       // Do not need to determine which option we are looking for if the binary digit is 0 indicating false
       if (binaryString[binaryIterator] === '0') {
@@ -60,10 +54,15 @@ function decompressCore(
       // Determine the key index in the optionMap based on our current position in the binaryString
       // plus the characterBitDepth times the compressed array index,
       // because each cycle represents a characterBitDepth amount of keys iterated over
-      // But add the offset to account for leading zeros in the binary string that weren't generated when converting to binary
-      // For example: if the binary string is '1', generally we would pad with 5 0s to make it 6 bits ('000001'),
-      // but if we only have 2 options left in the map, we would only pad with 1 0 to make it '01'
-      const keyIndex = binaryIterator + (compressedIterator * characterBitDepth) + offset;
+      const keyIndex = binaryIterator + (compressedIterator * characterBitDepth);
+
+      if (keyIndex >= keys.length) {
+        // Note that there is no warning here because this is a common path
+        // in cases where we padded the binary string with extra zeros
+        // to ensure the compressed string is a multiple of characterBitDepth
+        break;
+      }
+
       const key = keys[keyIndex];
       if (key !== undefined) {
         const value = getValue(key);

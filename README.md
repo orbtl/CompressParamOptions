@@ -14,7 +14,7 @@ Examples:
 
 ##### String Keys
 ```
-const stringOptionMap = {
+const stringOptionMap: StringOptionMap = {
   'lg': 'size-large',
   'med': 'size-medium',
   'sm': 'size-small',
@@ -25,7 +25,7 @@ const stringOptionMap = {
 
 ##### Number Keys
 ```
-const numberOptionMap = {
+const numberOptionMap: NumberOptionMap = {
   1: 'option-1',
   2: 'option-2',
   3: 'option-3'
@@ -34,7 +34,7 @@ const numberOptionMap = {
 
 ##### Array
 ```
-const arrayOptionMap = [
+const arrayOptionMap: ArrayOptionMap = [
   'option1',
   'option2',
   'option3',
@@ -48,7 +48,7 @@ Pass the `compressOptions` function your option map, and an array with the value
 
 Example using the String Keys option map from above:
 ```
-const selectedOptions = ['size-small', 'temperature-cold'];
+const selectedOptions: SelectedOptions = ['size-small', 'temperature-cold'];
 const compressedOptions = compressOptions(stringOptionMap, selectedOptions);
 console.log(compressedOptions); // Result: '6'
 ```

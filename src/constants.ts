@@ -1,4 +1,5 @@
 // URL-safe character set for compression
+//                             0         10        20        30        40        50        60
 export const safeCharacters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
 
 // Each character can represent 6 bits (2^6 = 64 characters)

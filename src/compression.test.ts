@@ -14,29 +14,29 @@ describe('compressOptions', () => {
     it('should compress selected options correctly', () => {
       const selected = ['value1', 'value3'];
       const result = compressOptions(stringOptions, selected);
-      expect(result).toBe('A'); // Binary: 1010 -> 10 (decimal) -> 'A'
+      expect(result).toBe('e'); // Binary: 101000 -> 40 (decimal) -> 'e'
     });
 
     it('should handle empty selection', () => {
       const selected: string[] = [];
       const result = compressOptions(stringOptions, selected);
-      expect(result).toBe('0'); // Binary: 0000 -> 0 -> '0'
+      expect(result).toBe('0'); // Binary: 000000 -> 0 -> '0'
     });
 
     it('should handle all options selected', () => {
       const selected = ['value1', 'value2', 'value3', 'value4'];
       const result = compressOptions(stringOptions, selected);
-      expect(result).toBe('F'); // Binary: 1111 -> 15 (decimal) -> 'F'
+      expect(result).toBe('y'); // Binary: 111100 -> 60 (decimal) -> 'y'
     });
 
     it('should handle uncompressed options when includeUncompressed is true', () => {
       const selected = ['value1', 'unknown_option'];
       const result = compressOptions(stringOptions, selected, true, false);
-      expect(result).toBe('8,unknown_option'); // Binary: 1000 -> 8 (decimal) -> '8', then separator and unknown option
+      expect(result).toBe('W,unknown_option'); // Binary: 100000 -> 32 (decimal) -> 'W', then separator and unknown option
     });
 
     it('should warn about uncompressed options when warnOnUncompressed is true', () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
       const selected = ['value1', 'unknown_option'];
       compressOptions(stringOptions, selected, false, true);
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -47,7 +47,7 @@ describe('compressOptions', () => {
     });
 
     it('should handle invalid selectedOptions input', () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
       const result = compressOptions(stringOptions, null as any);
       expect(result).toBe('');
       expect(consoleSpy).toHaveBeenCalledWith('Selected options must be an array.');
@@ -66,19 +66,19 @@ describe('compressOptions', () => {
     it('should compress selected options correctly', () => {
       const selected = ['feature_a', 'feature_c'];
       const result = compressOptions(numberOptions, selected);
-      expect(result).toBe('A'); // Binary: 1010 -> 10 (decimal) -> 'A'
+      expect(result).toBe('e'); // Binary: 101000 -> 40 (decimal) -> 'e'
     });
 
     it('should handle empty selection', () => {
       const selected: string[] = [];
       const result = compressOptions(numberOptions, selected);
-      expect(result).toBe('0'); // Binary: 0000 -> 0 -> '0'
+      expect(result).toBe('0'); // Binary: 000000 -> 0 -> '0'
     });
 
     it('should handle all options selected', () => {
       const selected = ['feature_a', 'feature_b', 'feature_c', 'feature_d'];
       const result = compressOptions(numberOptions, selected);
-      expect(result).toBe('F'); // Binary: 1111 -> 15 (decimal) -> 'F'
+      expect(result).toBe('y'); // Binary: 111100 -> 60 (decimal) -> 'y'
     });
   });
 
@@ -88,25 +88,25 @@ describe('compressOptions', () => {
     it('should compress selected options correctly', () => {
       const selected = ['red', 'green'];
       const result = compressOptions(arrayOptions, selected);
-      expect(result).toBe('A'); // Binary: 1010 -> 10 (decimal) -> 'A'
+      expect(result).toBe('e'); // Binary: 101000 -> 40 (decimal) -> 'e'
     });
 
     it('should handle empty selection', () => {
       const selected: string[] = [];
       const result = compressOptions(arrayOptions, selected);
-      expect(result).toBe('0'); // Binary: 0000 -> 0 -> '0'
+      expect(result).toBe('0'); // Binary: 000000 -> 0 -> '0'
     });
 
     it('should handle all options selected', () => {
       const selected = ['red', 'blue', 'green', 'yellow'];
       const result = compressOptions(arrayOptions, selected);
-      expect(result).toBe('F'); // Binary: 1111 -> 15 (decimal) -> 'F'
+      expect(result).toBe('y'); // Binary: 111100 -> 60 (decimal) -> 'y'
     });
 
     it('should handle uncompressed options', () => {
       const selected = ['red', 'purple'];
       const result = compressOptions(arrayOptions, selected, true, false);
-      expect(result).toBe('8,purple'); // Binary: 1000 -> 8 (decimal) -> '8', then separator and unknown option
+      expect(result).toBe('W,purple'); // Binary: 100000 -> 32 (decimal) -> 'W', then separator and unknown option
     });
   });
 
@@ -116,7 +116,7 @@ describe('compressOptions', () => {
       for (let i = 0; i < 10; i++) {
         largeOptions[`option${i}`] = `value${i}`;
       }
-      
+
       const selected = ['value0', 'value6', 'value7', 'value8'];
       const result = compressOptions(largeOptions, selected);
       expect(result).toHaveLength(2); // Should span 2 characters
@@ -127,7 +127,7 @@ describe('compressOptions', () => {
       for (let i = 0; i < 100; i++) {
         veryLargeOptions[i] = `feature_${i}`;
       }
-      
+
       const selected = ['feature_0', 'feature_99'];
       const result = compressOptions(veryLargeOptions, selected);
       expect(result.length).toBeGreaterThan(10); // Should span many characters

@@ -27,7 +27,12 @@ function compressCore(
     // If we get to our character bit depth or the end of the map,
     // convert the binary representation to a url-safe character and add it to compressed
     if (binaryRepresentation.length >= characterBitDepth || i === keys.length - 1) {
-      compressed += binaryToCharacter(binaryRepresentation);
+      // Handle cases where the optionsMap is not a multiple of characterBitDepth,
+      // so that future additions to optionsMap don't change the binary representation
+      // Note that during compression we pad the end so that 
+      // we will end up iterating over the correct indices first during decompressionn
+      const paddedBinary = binaryRepresentation.padEnd(characterBitDepth, '0');
+      compressed += binaryToCharacter(paddedBinary);
       binaryRepresentation = '';
     }
   }
