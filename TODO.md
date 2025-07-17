@@ -4,6 +4,8 @@ This project is a work in progress.  Here are some things to be considered for t
 
 - What if a separationCharacter is in the optionsMap options?
 
+- Separation character should be an optional parameter users can set themselves if they want, with an error thrown if it collides with the character map
+
 - What if illegal characters are in the uncaught filters?  do i need to base64 compress or something?
 
 - What if there are duplicates of a "selected" option?  compression vs decompression?
