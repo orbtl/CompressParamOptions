@@ -61,17 +61,40 @@ class PerformanceBenchmark {
 
   // Memory usage measurement utility
   private measureMemoryUsage<T>(fn: () => T): { result: T; memoryUsed: number } {
-    // Use performance.memory if available (Chrome), otherwise estimate
     const getMemoryUsage = () => {
+      // Check if we're in Node.js environment
+      if (typeof process !== 'undefined' && process.memoryUsage) {
+        return process.memoryUsage().heapUsed;
+      }
+      // Check if we're in Chrome with performance.memory
       if (typeof performance !== 'undefined' && 'memory' in performance) {
         return (performance as any).memory.usedJSHeapSize;
       }
-      // Fallback estimation for environments without memory API
+      // Fallback for environments without memory API
       return 0;
     };
 
+    // Force garbage collection if available (Node.js with --expose-gc flag)
+    if (typeof global !== 'undefined' && (global as any).gc) {
+      try {
+        (global as any).gc();
+      } catch (e) {
+        // Ignore if gc is not available
+      }
+    }
+
     const initialMemory = getMemoryUsage();
     const result = fn();
+
+    // Force garbage collection again to measure actual memory usage
+    if (typeof global !== 'undefined' && (global as any).gc) {
+      try {
+        (global as any).gc();
+      } catch (e) {
+        // Ignore if gc is not available
+      }
+    }
+
     const finalMemory = getMemoryUsage();
     return {
       result,
@@ -242,12 +265,13 @@ describe('Performance Benchmarks', () => {
 
         const selectedOptions = benchmark['generateSelectedOptions'](stringMap, 0.5);
 
-        benchmark.benchmarkCompression(stringMap, selectedOptions, `StringMap-${size}`, { iterations: 500 });
-        benchmark.benchmarkCompression(numberMap, selectedOptions, `NumberMap-${size}`, { iterations: 500 });
-        benchmark.benchmarkCompression(arrayMap, selectedOptions, `ArrayMap-${size}`, { iterations: 500 });
+        benchmark.benchmarkCompression(stringMap, selectedOptions, `StringMap-${size}`, { iterations: 500, measureMemory: true });
+        benchmark.benchmarkCompression(numberMap, selectedOptions, `NumberMap-${size}`, { iterations: 500, measureMemory: true });
+        benchmark.benchmarkCompression(arrayMap, selectedOptions, `ArrayMap-${size}`, { iterations: 500, measureMemory: true });
       });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(testSizes.length * 3);
 
       // Verify all results have reasonable execution times
@@ -264,10 +288,11 @@ describe('Performance Benchmarks', () => {
 
       selectionRatios.forEach(ratio => {
         const selectedOptions = benchmark['generateSelectedOptions'](optionMap, ratio);
-        benchmark.benchmarkCompression(optionMap, selectedOptions, `SelectionRatio-${ratio}`, { iterations: 500 });
+        benchmark.benchmarkCompression(optionMap, selectedOptions, `SelectionRatio-${ratio}`, { iterations: 500, measureMemory: true });
       });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(selectionRatios.length);
 
       // Verify compression ratio varies with selection ratio
@@ -286,10 +311,11 @@ describe('Performance Benchmarks', () => {
         const selectedOptions = benchmark['generateSelectedOptions'](optionMap, 0.5);
         const compressed = compressOptions(optionMap, selectedOptions);
 
-        benchmark.benchmarkDecompression(optionMap, compressed, selectedOptions.size, `Decompression-${size}`, { iterations: 500 });
+        benchmark.benchmarkDecompression(optionMap, compressed, selectedOptions.size, `Decompression-${size}`, { iterations: 500, measureMemory: true });
       });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(testSizes.length);
 
       results.forEach(result => {
@@ -307,7 +333,7 @@ describe('Performance Benchmarks', () => {
         const optionMap = benchmark['generateStringOptionMap'](size);
         const selectedOptions = benchmark['generateSelectedOptions'](optionMap, 0.5);
 
-        benchmark.benchmarkRoundTrip(optionMap, selectedOptions, `RoundTrip-${size}`, { iterations: 250 });
+        benchmark.benchmarkRoundTrip(optionMap, selectedOptions, `RoundTrip-${size}`, { iterations: 250, measureMemory: true });
 
         // Verify round-trip maintains data integrity
         const compressed = compressOptions(optionMap, selectedOptions);
@@ -317,6 +343,7 @@ describe('Performance Benchmarks', () => {
       });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(testSizes.length * 2); // compression + decompression for each size
     });
   });
@@ -340,6 +367,7 @@ describe('Performance Benchmarks', () => {
       });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(2);
 
       results.forEach(result => {
@@ -356,9 +384,10 @@ describe('Performance Benchmarks', () => {
       const optionMap = benchmark['generateStringOptionMap'](1000);
       const emptySelection: SelectedOptions = new Set<string>();
 
-      benchmark.benchmarkCompression(optionMap, emptySelection, 'EmptySelection', { iterations: 1000 });
+      benchmark.benchmarkCompression(optionMap, emptySelection, 'EmptySelection', { iterations: 1000, measureMemory: true });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(1);
       expect(results[0].executionTime).toBeGreaterThan(0);
     });
@@ -369,9 +398,10 @@ describe('Performance Benchmarks', () => {
       const optionMap = benchmark['generateStringOptionMap'](500);
       const fullSelection = benchmark['generateSelectedOptions'](optionMap, 1.0);
 
-      benchmark.benchmarkCompression(optionMap, fullSelection, 'FullSelection', { iterations: 500 });
+      benchmark.benchmarkCompression(optionMap, fullSelection, 'FullSelection', { iterations: 500, measureMemory: true });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(1);
       expect(results[0].executionTime).toBeGreaterThan(0);
     });
@@ -382,9 +412,10 @@ describe('Performance Benchmarks', () => {
       const optionMap = benchmark['generateStringOptionMap'](1000);
       const singleSelection = new Set([Object.values(optionMap)[0]]);
 
-      benchmark.benchmarkCompression(optionMap, singleSelection, 'SingleSelection', { iterations: 1000 });
+      benchmark.benchmarkCompression(optionMap, singleSelection, 'SingleSelection', { iterations: 1000, measureMemory: true });
 
       const results = benchmark.getResults();
+      benchmark.printResults();
       expect(results).toHaveLength(1);
       expect(results[0].executionTime).toBeGreaterThan(0);
     });
@@ -402,22 +433,22 @@ describe('Performance Benchmarks', () => {
       const selectedOptions = benchmark['generateSelectedOptions'](stringMap, 0.5);
 
       // Benchmark all three approaches
-      const stringResult = benchmark.benchmarkCompression(stringMap, selectedOptions, 'StringMap', { iterations: 1000 });
-      const numberResult = benchmark.benchmarkCompression(numberMap, selectedOptions, 'NumberMap', { iterations: 1000 });
-      const arrayResult = benchmark.benchmarkCompression(arrayMap, selectedOptions, 'ArrayMap', { iterations: 1000 });
+      const stringResult = benchmark.benchmarkCompression(stringMap, selectedOptions, 'StringMap', { iterations: 1000, measureMemory: true });
+      const numberResult = benchmark.benchmarkCompression(numberMap, selectedOptions, 'NumberMap', { iterations: 1000, measureMemory: true });
+      const arrayResult = benchmark.benchmarkCompression(arrayMap, selectedOptions, 'ArrayMap', { iterations: 1000, measureMemory: true });
 
       // Print comparative results
       console.log('\nPerformance Comparison:');
-      console.log(`String Map: ${stringResult.executionTime.toFixed(4)}ms, ${stringResult.throughput.toFixed(2)} ops/ms`);
-      console.log(`Number Map: ${numberResult.executionTime.toFixed(4)}ms, ${numberResult.throughput.toFixed(2)} ops/ms`);
-      console.log(`Array Map: ${arrayResult.executionTime.toFixed(4)}ms, ${arrayResult.throughput.toFixed(2)} ops/ms`);
+      console.log(`String Map: ${stringResult.executionTime.toFixed(4)}ms, ${stringResult.throughput.toFixed(2)} ops/ms, ${((stringResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
+      console.log(`Number Map: ${numberResult.executionTime.toFixed(4)}ms, ${numberResult.throughput.toFixed(2)} ops/ms, ${((numberResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
+      console.log(`Array Map: ${arrayResult.executionTime.toFixed(4)}ms, ${arrayResult.throughput.toFixed(2)} ops/ms, ${((arrayResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
 
       expect(stringResult.executionTime).toBeGreaterThan(0);
       expect(numberResult.executionTime).toBeGreaterThan(0);
       expect(arrayResult.executionTime).toBeGreaterThan(0);
     });
   });
-}, { timeout: 120000 }); // Increase timeout for performance tests
+}, 120000); // Increase timeout for performance tests
 
 // Export the benchmark class for external use
 export { PerformanceBenchmark, type PerformanceResult, type BenchmarkOptions };
