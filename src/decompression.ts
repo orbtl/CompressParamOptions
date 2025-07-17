@@ -1,17 +1,13 @@
 import type { OptionMap, SelectedOptions, StringOptionMap, NumberOptionMap, ArrayOptionMap } from './types/types.js';
 import { characterBitDepth, separationCharacter, characterMap } from './constants.js';
 
-function characterToBinary(character: string): string {
+function characterToIndex(character: string): number {
   const index = characterMap[character];
   if (index === undefined) {
     throw new Error(`Character ${character} is not a valid character.`);
   }
 
-  // Convert to binary and pad with zeros to ensure consistent bit depth
-  // Note that unlike compression, during decompression we pad the start
-  // because we are rebuilding from an index that might be too small to include leading digits,
-  // such as '001000' which would return as '1000' if we didn't pad
-  return index.toString(2).padStart(characterBitDepth, '0');
+  return index;
 }
 
 // Shared decompression logic
@@ -42,12 +38,18 @@ function decompressCore(
       continue;
     }
 
-    // Convert from url safe character to binary string
-    const binaryString = characterToBinary(compressed[compressedIterator]);
+    // Convert from url safe character to binary
+    const binary = characterToIndex(compressed[compressedIterator]);
 
-    for (let binaryIterator = 0; binaryIterator < binaryString.length; binaryIterator++) {
+    for (let binaryIterator = 0; binaryIterator < characterBitDepth; binaryIterator++) {
+      // Start iteration at characterBitDepth - 1 because we want the first of the 6 bits
+      // to represent the first key of the 6, so we need to shift right 5x to get to the first bit
+      const currentBinaryValue = binary >> (characterBitDepth - 1 - binaryIterator);
+
       // Do not need to determine which option we are looking for if the binary digit is 0 indicating false
-      if (binaryString[binaryIterator] === '0') {
+      // Bitwise AND with 1 will ignore all other digits except the rightmost,
+      // which after the shift above should be the correct digit
+      if ((currentBinaryValue & 1) !== 1) {
         continue;
       }
 

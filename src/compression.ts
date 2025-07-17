@@ -1,10 +1,12 @@
 import type { OptionMap, SelectedOptions, StringOptionMap, NumberOptionMap, ArrayOptionMap } from './types/types.js';
 import { safeCharacters, characterBitDepth, separationCharacter } from './constants.js';
 
-function binaryToCharacter(binaryString: string): string {
-  const intValue = parseInt(binaryString, 2);
+function binaryToCharacter(binary: number): string {
   // For safety, ensure the value is within the range of safe characters
-  return safeCharacters[intValue % safeCharacters.length];
+  if (binary >= safeCharacters.length || binary < 0) {
+    throw new Error(`Binary value ${binary} is out of bounds for safe characters.`);
+  }
+  return safeCharacters[binary];
 }
 
 // Shared compression logic
@@ -17,23 +19,29 @@ function compressCore(
   warnOnUncompressed: boolean
 ): string {
   let compressed = '';
-  let binaryRepresentation = '';
+  let binaryRepresentation = 0;
+  let currentBinaryBits = 0;
 
   for (let i = 0; i < keys.length; i++) {
     const value = getValue(keys[i]);
+
+    // Shift left to make space for the new bit
+    // This should not have any effect on the first iteration as 0 << 1 is 0
+    binaryRepresentation <<= 1;
+    currentBinaryBits++;
+
     // Add binary true or false for if this index of the optionMap is included
-    binaryRepresentation += selectedOptions.has(value) ? '1' : '0';
+    if (selectedOptions.has(value)) {
+      // bitwise OR 1 will change the newly shifted bit from 0 to 1 and leave the rest unchanged
+      binaryRepresentation = binaryRepresentation | 1;
+    }
 
     // If we get to our character bit depth or the end of the map,
     // convert the binary representation to a url-safe character and add it to compressed
-    if (binaryRepresentation.length >= characterBitDepth || i === keys.length - 1) {
-      // Handle cases where the optionsMap is not a multiple of characterBitDepth,
-      // so that future additions to optionsMap don't change the binary representation
-      // Note that during compression we pad the end so that 
-      // we will end up iterating over the correct indices first during decompressionn
-      const paddedBinary = binaryRepresentation.padEnd(characterBitDepth, '0');
-      compressed += binaryToCharacter(paddedBinary);
-      binaryRepresentation = '';
+    if (currentBinaryBits >= characterBitDepth || i === keys.length - 1) {
+      compressed += binaryToCharacter(binaryRepresentation);
+      binaryRepresentation = 0;
+      currentBinaryBits = 0;
     }
   }
 
