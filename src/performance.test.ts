@@ -63,8 +63,8 @@ class PerformanceBenchmark {
   private measureMemoryUsage<T>(fn: () => T): { result: T; memoryUsed: number } {
     const getMemoryUsage = () => {
       // Check if we're in Node.js environment
-      if (typeof process !== 'undefined' && process.memoryUsage) {
-        return process.memoryUsage().heapUsed;
+      if (typeof globalThis !== 'undefined' && 'process' in globalThis && (globalThis as any).process?.memoryUsage) {
+        return (globalThis as any).process.memoryUsage().heapUsed;
       }
       // Check if we're in Chrome with performance.memory
       if (typeof performance !== 'undefined' && 'memory' in performance) {
@@ -75,9 +75,9 @@ class PerformanceBenchmark {
     };
 
     // Force garbage collection if available (Node.js with --expose-gc flag)
-    if (typeof global !== 'undefined' && (global as any).gc) {
+    if (typeof globalThis !== 'undefined' && 'global' in globalThis && (globalThis as any).global?.gc) {
       try {
-        (global as any).gc();
+        (globalThis as any).global.gc();
       } catch (e) {
         // Ignore if gc is not available
       }
@@ -87,9 +87,9 @@ class PerformanceBenchmark {
     const result = fn();
 
     // Force garbage collection again to measure actual memory usage
-    if (typeof global !== 'undefined' && (global as any).gc) {
+    if (typeof globalThis !== 'undefined' && 'global' in globalThis && (globalThis as any).global?.gc) {
       try {
-        (global as any).gc();
+        (globalThis as any).global.gc();
       } catch (e) {
         // Ignore if gc is not available
       }
@@ -448,7 +448,7 @@ describe('Performance Benchmarks', () => {
       expect(arrayResult.executionTime).toBeGreaterThan(0);
     });
   });
-}, 120000); // Increase timeout for performance tests
+});
 
 // Export the benchmark class for external use
 export { PerformanceBenchmark, type PerformanceResult, type BenchmarkOptions };

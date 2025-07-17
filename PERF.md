@@ -401,108 +401,108 @@ stdout | src/performance.test.ts > Performance Benchmarks > Compression Performa
 
 Compression - StringMap-10:
   Data Size: 5/10 options
-  Execution Time: 0.0023ms
-  Throughput: 2131.83 ops/ms
+  Execution Time: 0.0024ms
+  Throughput: 2109.17 ops/ms
   Compression Ratio: 28.00:1
-  Memory Usage: 0.00KB
+  Memory Usage: 6.77KB
 
 Compression - NumberMap-10:
   Data Size: 5/10 options
   Execution Time: 0.0015ms
-  Throughput: 3389.37 ops/ms
+  Throughput: 3337.78 ops/ms
   Compression Ratio: 28.00:1
   Memory Usage: 1.16KB
 
 Compression - ArrayMap-10:
   Data Size: 5/10 options
-  Execution Time: 0.0024ms
-  Throughput: 2053.39 ops/ms
+  Execution Time: 0.0026ms
+  Throughput: 1952.67 ops/ms
   Compression Ratio: 28.00:1
   Memory Usage: 1.15KB
 
 Compression - StringMap-50:
   Data Size: 25/50 options
-  Execution Time: 0.0135ms
-  Throughput: 1856.97 ops/ms
+  Execution Time: 0.0131ms
+  Throughput: 1903.86 ops/ms
   Compression Ratio: 32.89:1
   Memory Usage: 5.86KB
 
 Compression - NumberMap-50:
   Data Size: 25/50 options
   Execution Time: 0.0055ms
-  Throughput: 4547.11 ops/ms
+  Throughput: 4576.41 ops/ms
   Compression Ratio: 32.89:1
   Memory Usage: 3.48KB
 
 Compression - ArrayMap-50:
   Data Size: 25/50 options
-  Execution Time: 0.0062ms
-  Throughput: 4061.74 ops/ms
+  Execution Time: 0.0065ms
+  Throughput: 3864.35 ops/ms
   Compression Ratio: 32.89:1
   Memory Usage: 3.03KB
 
 Compression - StringMap-100:
   Data Size: 50/100 options
-  Execution Time: 0.0270ms
-  Throughput: 1855.15 ops/ms
+  Execution Time: 0.0278ms
+  Throughput: 1799.04 ops/ms
   Compression Ratio: 35.06:1
-  Memory Usage: 11.38KB
+  Memory Usage: 11.75KB
 
 Compression - NumberMap-100:
   Data Size: 50/100 options
-  Execution Time: 0.0128ms
-  Throughput: 3913.28 ops/ms
+  Execution Time: 0.0130ms
+  Throughput: 3832.18 ops/ms
   Compression Ratio: 35.06:1
   Memory Usage: 5.57KB
 
 Compression - ArrayMap-100:
   Data Size: 50/100 options
-  Execution Time: 0.0149ms
-  Throughput: 3348.69 ops/ms
+  Execution Time: 0.0155ms
+  Throughput: 3233.02 ops/ms
   Compression Ratio: 35.06:1
   Memory Usage: 5.03KB
 
 Compression - StringMap-500:
   Data Size: 250/500 options
-  Execution Time: 0.2602ms
-  Throughput: 960.67 ops/ms
+  Execution Time: 0.2636ms
+  Throughput: 948.24 ops/ms
   Compression Ratio: 38.05:1
-  Memory Usage: 50.45KB
+  Memory Usage: 50.55KB
 
 Compression - NumberMap-500:
   Data Size: 250/500 options
-  Execution Time: 0.1565ms
-  Throughput: 1597.64 ops/ms
+  Execution Time: 0.1567ms
+  Throughput: 1595.84 ops/ms
   Compression Ratio: 38.05:1
   Memory Usage: 23.52KB
 
 Compression - ArrayMap-500:
   Data Size: 250/500 options
-  Execution Time: 0.1665ms
-  Throughput: 1501.51 ops/ms
+  Execution Time: 0.1688ms
+  Throughput: 1481.01 ops/ms
   Compression Ratio: 38.05:1
   Memory Usage: 22.77KB
 
 Compression - StringMap-1000:
   Data Size: 500/1000 options
-  Execution Time: 0.8250ms
-  Throughput: 606.05 ops/ms
+  Execution Time: 0.8374ms
+  Throughput: 597.11 ops/ms
   Compression Ratio: 38.60:1
-  Memory Usage: 100.41KB
+  Memory Usage: 102.99KB
 
 Compression - NumberMap-1000:
   Data Size: 500/1000 options
-  Execution Time: 0.6068ms
-  Throughput: 823.95 ops/ms
+  Execution Time: 0.6111ms
+  Throughput: 818.20 ops/ms
   Compression Ratio: 38.60:1
   Memory Usage: 49.30KB
 
 Compression - ArrayMap-1000:
   Data Size: 500/1000 options
-  Execution Time: 0.6255ms
-  Throughput: 799.36 ops/ms
+  Execution Time: 0.6322ms
+  Throughput: 790.93 ops/ms
   Compression Ratio: 38.60:1
-  Memory Usage: 44.88KB
+  Memory Usage: 52.59KB
 
 
 stdout | src/performance.test.ts > Performance Benchmarks > Compression Performance > should benchmark compression with different selection ratios
@@ -511,36 +511,36 @@ stdout | src/performance.test.ts > Performance Benchmarks > Compression Performa
 
 Compression - SelectionRatio-0.1:
   Data Size: 100/1000 options
-  Execution Time: 0.3956ms
-  Throughput: 252.81 ops/ms
+  Execution Time: 0.4011ms
+  Throughput: 249.34 ops/ms
   Compression Ratio: 7.72:1
-  Memory Usage: 103.05KB
+  Memory Usage: 97.39KB
 
 Compression - SelectionRatio-0.3:
   Data Size: 300/1000 options
-  Execution Time: 0.5658ms
-  Throughput: 530.21 ops/ms
+  Execution Time: 0.5675ms
+  Throughput: 528.66 ops/ms
   Compression Ratio: 23.13:1
-  Memory Usage: 98.84KB
+  Memory Usage: 113.70KB
 
 Compression - SelectionRatio-0.5:
   Data Size: 500/1000 options
-  Execution Time: 0.8194ms
-  Throughput: 610.18 ops/ms
+  Execution Time: 0.8199ms
+  Throughput: 609.86 ops/ms
   Compression Ratio: 38.60:1
-  Memory Usage: 100.41KB
+  Memory Usage: 102.99KB
 
 Compression - SelectionRatio-0.7:
   Data Size: 700/1000 options
-  Execution Time: 0.7809ms
-  Throughput: 896.38 ops/ms
+  Execution Time: 0.7822ms
+  Throughput: 894.92 ops/ms
   Compression Ratio: 53.84:1
-  Memory Usage: 108.05KB
+  Memory Usage: 101.97KB
 
 Compression - SelectionRatio-0.9:
   Data Size: 900/1000 options
-  Execution Time: 1.1331ms
-  Throughput: 794.31 ops/ms
+  Execution Time: 1.1371ms
+  Throughput: 791.47 ops/ms
   Compression Ratio: 69.41:1
   Memory Usage: 103.53KB
 
@@ -551,33 +551,33 @@ stdout | src/performance.test.ts > Performance Benchmarks > Decompression Perfor
 
 Decompression - Decompression-10:
   Data Size: 5 options from 2 chars
-  Execution Time: 0.0012ms
-  Throughput: 4018.65 ops/ms
+  Execution Time: 0.0013ms
+  Throughput: 3939.49 ops/ms
   Memory Usage: 0.86KB
 
 Decompression - Decompression-50:
   Data Size: 25 options from 9 chars
-  Execution Time: 0.0038ms
-  Throughput: 6599.44 ops/ms
+  Execution Time: 0.0039ms
+  Throughput: 6406.31 ops/ms
   Memory Usage: 2.76KB
 
 Decompression - Decompression-100:
   Data Size: 50 options from 17 chars
-  Execution Time: 0.0077ms
-  Throughput: 6523.50 ops/ms
+  Execution Time: 0.0074ms
+  Throughput: 6738.00 ops/ms
   Memory Usage: 5.02KB
 
 Decompression - Decompression-500:
   Data Size: 250 options from 84 chars
-  Execution Time: 0.0482ms
-  Throughput: 5183.04 ops/ms
+  Execution Time: 0.0506ms
+  Throughput: 4944.33 ops/ms
   Memory Usage: 20.41KB
 
 Decompression - Decompression-1000:
   Data Size: 500 options from 167 chars
-  Execution Time: 0.1103ms
-  Throughput: 4533.11 ops/ms
-  Memory Usage: 44.16KB
+  Execution Time: 0.1136ms
+  Throughput: 4403.26 ops/ms
+  Memory Usage: 40.21KB
 
 
 stdout | src/performance.test.ts > Performance Benchmarks > Round-trip Performance > should benchmark full compression-decompression cycle
@@ -587,66 +587,66 @@ stdout | src/performance.test.ts > Performance Benchmarks > Round-trip Performan
 Compression - RoundTrip-10:
   Data Size: 5/10 options
   Execution Time: 0.0007ms
-  Throughput: 7673.42 ops/ms
+  Throughput: 7436.05 ops/ms
   Compression Ratio: 28.00:1
   Memory Usage: 1.01KB
 
 Decompression - RoundTrip-10:
   Data Size: 5 options from 2 chars
-  Execution Time: 0.0011ms
-  Throughput: 4393.67 ops/ms
+  Execution Time: 0.0005ms
+  Throughput: 9527.44 ops/ms
   Memory Usage: 0.86KB
 
 Compression - RoundTrip-50:
   Data Size: 25/50 options
-  Execution Time: 0.0112ms
-  Throughput: 2236.22 ops/ms
+  Execution Time: 0.0114ms
+  Throughput: 2202.10 ops/ms
   Compression Ratio: 32.89:1
   Memory Usage: 5.88KB
 
 Decompression - RoundTrip-50:
   Data Size: 25 options from 9 chars
-  Execution Time: 0.0034ms
-  Throughput: 7317.64 ops/ms
+  Execution Time: 0.0045ms
+  Throughput: 5612.93 ops/ms
   Memory Usage: 2.76KB
 
 Compression - RoundTrip-100:
   Data Size: 50/100 options
-  Execution Time: 0.0260ms
-  Throughput: 1921.81 ops/ms
+  Execution Time: 0.0259ms
+  Throughput: 1930.14 ops/ms
   Compression Ratio: 35.06:1
   Memory Usage: 11.38KB
 
 Decompression - RoundTrip-100:
   Data Size: 50 options from 17 chars
-  Execution Time: 0.0068ms
-  Throughput: 7305.67 ops/ms
+  Execution Time: 0.0080ms
+  Throughput: 6246.25 ops/ms
   Memory Usage: 5.02KB
 
 Compression - RoundTrip-500:
   Data Size: 250/500 options
-  Execution Time: 0.2528ms
-  Throughput: 988.85 ops/ms
+  Execution Time: 0.2560ms
+  Throughput: 976.70 ops/ms
   Compression Ratio: 38.05:1
-  Memory Usage: 50.73KB
+  Memory Usage: 50.45KB
 
 Decompression - RoundTrip-500:
   Data Size: 250 options from 84 chars
-  Execution Time: 0.0474ms
-  Throughput: 5276.84 ops/ms
-  Memory Usage: 21.66KB
+  Execution Time: 0.0494ms
+  Throughput: 5058.15 ops/ms
+  Memory Usage: 20.41KB
 
 Compression - RoundTrip-1000:
   Data Size: 500/1000 options
-  Execution Time: 0.8168ms
-  Throughput: 612.11 ops/ms
+  Execution Time: 0.8203ms
+  Throughput: 609.55 ops/ms
   Compression Ratio: 38.60:1
-  Memory Usage: 100.41KB
+  Memory Usage: 102.99KB
 
 Decompression - RoundTrip-1000:
   Data Size: 500 options from 167 chars
-  Execution Time: 0.1106ms
-  Throughput: 4519.95 ops/ms
+  Execution Time: 0.1117ms
+  Throughput: 4477.30 ops/ms
   Memory Usage: 40.21KB
 
 
@@ -656,16 +656,16 @@ stdout | src/performance.test.ts > Performance Benchmarks > Memory Usage Benchma
 
 Compression - LargeDataset-Compression:
   Data Size: 3000/10000 options
-  Execution Time: 39.0298ms
-  Throughput: 76.86 ops/ms
+  Execution Time: 37.3652ms
+  Throughput: 80.29 ops/ms
   Compression Ratio: 24.97:1
-  Memory Usage: 0.00KB
+  Memory Usage: 1247.84KB
 
 Decompression - LargeDataset-Decompression:
   Data Size: 3000 options from 1667 chars
-  Execution Time: 1.2381ms
-  Throughput: 2423.02 ops/ms
-  Memory Usage: 507.02KB
+  Execution Time: 1.2476ms
+  Throughput: 2404.71 ops/ms
+  Memory Usage: 511.77KB
 
 
 stdout | src/performance.test.ts > Performance Benchmarks > Edge Cases Performance > should benchmark performance with empty selections
@@ -674,7 +674,7 @@ stdout | src/performance.test.ts > Performance Benchmarks > Edge Cases Performan
 
 Compression - EmptySelection:
   Data Size: 0/1000 options
-  Execution Time: 0.2604ms
+  Execution Time: 0.2632ms
   Throughput: 0.00 ops/ms
   Compression Ratio: 0.01:1
   Memory Usage: 96.48KB
@@ -686,8 +686,8 @@ stdout | src/performance.test.ts > Performance Benchmarks > Edge Cases Performan
 
 Compression - FullSelection:
   Data Size: 500/500 options
-  Execution Time: 0.3717ms
-  Throughput: 1345.09 ops/ms
+  Execution Time: 0.3710ms
+  Throughput: 1347.70 ops/ms
   Compression Ratio: 76.08:1
   Memory Usage: 52.40KB
 
@@ -698,8 +698,8 @@ stdout | src/performance.test.ts > Performance Benchmarks > Edge Cases Performan
 
 Compression - SingleSelection:
   Data Size: 1/1000 options
-  Execution Time: 0.2658ms
-  Throughput: 3.76 ops/ms
+  Execution Time: 0.2679ms
+  Throughput: 3.73 ops/ms
   Compression Ratio: 0.07:1
   Memory Usage: 96.51KB
 
@@ -707,17 +707,17 @@ Compression - SingleSelection:
 stdout | src/performance.test.ts > Performance Benchmarks > Performance Comparison > should provide performance comparison between different approaches
 
 Performance Comparison:
-String Map: 0.8176ms, 611.56 ops/ms, 100.41KB
-Number Map: 0.5959ms, 839.05 ops/ms, 49.30KB
-Array Map: 0.6178ms, 809.27 ops/ms, 44.88KB
+String Map: 0.8177ms, 611.47 ops/ms, 100.41KB
+Number Map: 0.5954ms, 839.75 ops/ms, 49.30KB
+Array Map: 0.6202ms, 806.16 ops/ms, 44.88KB
 
- ✓ src/performance.test.ts (9 tests) 11541ms
-   ✓ Performance Benchmarks > Compression Performance > should benchmark compression with different option map sizes  1511ms
-   ✓ Performance Benchmarks > Compression Performance > should benchmark compression with different selection ratios  2039ms
-   ✓ Performance Benchmarks > Decompression Performance > should benchmark decompression with different compressed string sizes 98ms
-   ✓ Performance Benchmarks > Round-trip Performance > should benchmark full compression-decompression cycle  358ms
-   ✓ Performance Benchmarks > Memory Usage Benchmarks > should measure memory usage for large datasets  4508ms
-   ✓ Performance Benchmarks > Edge Cases Performance > should benchmark performance with empty selections 288ms
-   ✓ Performance Benchmarks > Edge Cases Performance > should benchmark performance with full selections 206ms
-   ✓ Performance Benchmarks > Edge Cases Performance > should benchmark performance with single option 294ms
-   ✓ Performance Benchmarks > Performance Comparison > should provide performance comparison between different approaches  2239ms
+ ✓ src/performance.test.ts (9 tests) 11399ms
+   ✓ Performance Benchmarks > Compression Performance > should benchmark compression with different option map sizes  1529ms
+   ✓ Performance Benchmarks > Compression Performance > should benchmark compression with different selection ratios  2046ms
+   ✓ Performance Benchmarks > Decompression Performance > should benchmark decompression with different compressed string sizes 103ms
+   ✓ Performance Benchmarks > Round-trip Performance > should benchmark full compression-decompression cycle  361ms
+   ✓ Performance Benchmarks > Memory Usage Benchmarks > should measure memory usage for large datasets  4324ms
+   ✓ Performance Benchmarks > Edge Cases Performance > should benchmark performance with empty selections 292ms
+   ✓ Performance Benchmarks > Edge Cases Performance > should benchmark performance with full selections 205ms
+   ✓ Performance Benchmarks > Edge Cases Performance > should benchmark performance with single option 296ms
+   ✓ Performance Benchmarks > Performance Comparison > should provide performance comparison between different approaches  2241ms
