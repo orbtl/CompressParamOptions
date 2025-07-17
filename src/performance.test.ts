@@ -319,7 +319,7 @@ describe('Performance Benchmarks', () => {
       expect(results).toHaveLength(testSizes.length);
 
       results.forEach(result => {
-        expect(result.executionTime).toBeGreaterThan(0);
+        expect(result.executionTime, `${result.operation}: ${result.executionTime.toFixed(4)}ms, Memory: ${((result.memoryUsage || 0) / 1024).toFixed(2)}KB`).toBeGreaterThan(0);
         expect(result.throughput).toBeGreaterThan(0);
       });
     });
