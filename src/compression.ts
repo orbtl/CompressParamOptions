@@ -39,6 +39,12 @@ function compressCore(
     // If we get to our character bit depth or the end of the map,
     // convert the binary representation to a url-safe character and add it to compressed
     if (currentBinaryBits >= characterBitDepth || i === keys.length - 1) {
+      // Note that if we get to the end of the map and we have not filled the characterBitDepth,
+      // we need to shift to pad the rest of the 0s so they are in the right digits
+      if (i === keys.length - 1) {
+        binaryRepresentation <<= (characterBitDepth - currentBinaryBits);
+      }
+
       compressed += binaryToCharacter(binaryRepresentation);
       binaryRepresentation = 0;
       currentBinaryBits = 0;
