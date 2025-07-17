@@ -12,7 +12,7 @@ function compressCore(
   keys: (string | number)[],
   getValue: (key: string | number) => string,
   allValues: string[],
-  selectedOptions: SelectedOptions,
+  selectedOptions: Set<string>,
   includeUncompressed: boolean,
   warnOnUncompressed: boolean
 ): string {
@@ -22,7 +22,7 @@ function compressCore(
   for (let i = 0; i < keys.length; i++) {
     const value = getValue(keys[i]);
     // Add binary true or false for if this index of the optionMap is included
-    binaryRepresentation += selectedOptions.includes(value) ? '1' : '0';
+    binaryRepresentation += selectedOptions.has(value) ? '1' : '0';
 
     // If we get to our character bit depth or the end of the map,
     // convert the binary representation to a url-safe character and add it to compressed
@@ -40,7 +40,7 @@ function compressCore(
   // Handle options in selectedOptions that do not exist in the optionMap and can't be compressed,
   // but only if the user wants them included or warned on
   if (warnOnUncompressed || includeUncompressed) {
-    const uncaughtOptions = selectedOptions.filter(o => !allValues.includes(o));
+    const uncaughtOptions = [...selectedOptions].filter(o => !allValues.includes(o));
     if (uncaughtOptions.length > 0) {
       if (warnOnUncompressed) {
         console.warn('The following options are not in the optionMap and cannot be compressed:', uncaughtOptions);
@@ -139,8 +139,8 @@ export function compressOptions(
 ): string {
   if (typeof selectedOptions === 'undefined'
     || selectedOptions === null
-    || !Array.isArray(selectedOptions)) {
-    console.warn('Selected options must be an array.');
+    || !(selectedOptions instanceof Set)) {
+    console.warn('Selected options must be a Set.');
     return '';
   }
 

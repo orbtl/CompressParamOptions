@@ -20,7 +20,7 @@ function decompressCore(
   getValue: (key: string | number) => string,
   compressed: string
 ): SelectedOptions {
-  const decompressed: SelectedOptions = [];
+  const decompressed = new Set<string>();
   let compressedIterator = 0;
 
   while (compressedIterator < compressed.length) {
@@ -38,7 +38,7 @@ function decompressCore(
         compressedIterator++;
       }
 
-      decompressed.push(uncaughtOption);
+      decompressed.add(uncaughtOption);
       continue;
     }
 
@@ -67,7 +67,7 @@ function decompressCore(
       if (key !== undefined) {
         const value = getValue(key);
         if (value !== undefined) {
-          decompressed.push(value);
+          decompressed.add(value);
         } else {
           console.warn(`Value for key ${key} at index ${keyIndex} is undefined in the optionMap.`);
         }
@@ -150,7 +150,7 @@ export function decompressOptions(
   compressed: string
 ): SelectedOptions {
   if (typeof compressed !== 'string') {
-    return [];
+    return new Set<string>();
   }
 
   if (Array.isArray(optionMap)) {

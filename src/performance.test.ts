@@ -45,14 +45,14 @@ class PerformanceBenchmark {
   private generateSelectedOptions(optionMap: OptionMap, selectionRatio: number = 0.5): SelectedOptions {
     const allValues = Array.isArray(optionMap) ? optionMap : Object.values(optionMap);
     const selectedCount = Math.floor(allValues.length * selectionRatio);
-    const selected: SelectedOptions = [];
+    const selected = new Set<string>();
 
     // Select options at regular intervals to ensure consistent distribution
     const interval = Math.floor(allValues.length / selectedCount);
     for (let i = 0; i < selectedCount; i++) {
       const index = i * interval;
       if (index < allValues.length) {
-        selected.push(allValues[index]);
+        selected.add(allValues[index]);
       }
     }
 
@@ -121,14 +121,14 @@ class PerformanceBenchmark {
       memoryUsed = memoryResult.memoryUsed;
     }
 
-    const originalSize = JSON.stringify(selectedOptions).length;
+    const originalSize = JSON.stringify([...selectedOptions]).length;
     const compressedSize = timing.result.length;
     const compressionRatio = originalSize / compressedSize;
-    const throughput = selectedOptions.length / timing.avgTime; // options per ms
+    const throughput = selectedOptions.size / timing.avgTime; // options per ms
 
     const result: PerformanceResult = {
       operation: `Compression - ${label}`,
-      dataSize: `${selectedOptions.length}/${Array.isArray(optionMap) ? optionMap.length : Object.keys(optionMap).length} options`,
+      dataSize: `${selectedOptions.size}/${Array.isArray(optionMap) ? optionMap.length : Object.keys(optionMap).length} options`,
       executionTime: timing.avgTime,
       throughput,
       compressionRatio,
@@ -183,7 +183,7 @@ class PerformanceBenchmark {
     const compressed = compressOptions(optionMap, selectedOptions);
 
     const compressionResult = this.benchmarkCompression(optionMap, selectedOptions, label, options);
-    const decompressionResult = this.benchmarkDecompression(optionMap, compressed, selectedOptions.length, label, options);
+    const decompressionResult = this.benchmarkDecompression(optionMap, compressed, selectedOptions.size, label, options);
 
     return {
       compression: compressionResult,
@@ -286,7 +286,7 @@ describe('Performance Benchmarks', () => {
         const selectedOptions = benchmark['generateSelectedOptions'](optionMap, 0.5);
         const compressed = compressOptions(optionMap, selectedOptions);
 
-        benchmark.benchmarkDecompression(optionMap, compressed, selectedOptions.length, `Decompression-${size}`, { iterations: 500 });
+        benchmark.benchmarkDecompression(optionMap, compressed, selectedOptions.size, `Decompression-${size}`, { iterations: 500 });
       });
 
       const results = benchmark.getResults();
@@ -313,7 +313,7 @@ describe('Performance Benchmarks', () => {
         const compressed = compressOptions(optionMap, selectedOptions);
         const decompressed = decompressOptions(optionMap, compressed);
 
-        expect(decompressed.sort()).toEqual(selectedOptions.sort());
+        expect(decompressed).toEqual(selectedOptions);
       });
 
       const results = benchmark.getResults();
@@ -334,7 +334,7 @@ describe('Performance Benchmarks', () => {
       });
 
       const compressed = compressOptions(largeOptionMap, selectedOptions);
-      benchmark.benchmarkDecompression(largeOptionMap, compressed, selectedOptions.length, 'LargeDataset-Decompression', {
+      benchmark.benchmarkDecompression(largeOptionMap, compressed, selectedOptions.size, 'LargeDataset-Decompression', {
         iterations: 100,
         measureMemory: true
       });
@@ -354,7 +354,7 @@ describe('Performance Benchmarks', () => {
       benchmark.clearResults();
 
       const optionMap = benchmark['generateStringOptionMap'](1000);
-      const emptySelection: SelectedOptions = [];
+      const emptySelection: SelectedOptions = new Set<string>();
 
       benchmark.benchmarkCompression(optionMap, emptySelection, 'EmptySelection', { iterations: 1000 });
 
@@ -380,7 +380,7 @@ describe('Performance Benchmarks', () => {
       benchmark.clearResults();
 
       const optionMap = benchmark['generateStringOptionMap'](1000);
-      const singleSelection = [Object.values(optionMap)[0]];
+      const singleSelection = new Set([Object.values(optionMap)[0]]);
 
       benchmark.benchmarkCompression(optionMap, singleSelection, 'SingleSelection', { iterations: 1000 });
 
@@ -390,33 +390,34 @@ describe('Performance Benchmarks', () => {
     });
   });
 
-  // Performance comparison utility
-  it('should provide performance comparison between different approaches', () => {
-    benchmark.clearResults();
+  describe('Performance Comparison', () => {
+    it('should provide performance comparison between different approaches', () => {
+      benchmark.clearResults();
 
-    const size = 1000;
-    const stringMap = benchmark['generateStringOptionMap'](size);
-    const numberMap = benchmark['generateNumberOptionMap'](size);
-    const arrayMap = benchmark['generateArrayOptionMap'](size);
+      const size = 1000;
+      const stringMap = benchmark['generateStringOptionMap'](size);
+      const numberMap = benchmark['generateNumberOptionMap'](size);
+      const arrayMap = benchmark['generateArrayOptionMap'](size);
 
-    const selectedOptions = benchmark['generateSelectedOptions'](stringMap, 0.5);
+      const selectedOptions = benchmark['generateSelectedOptions'](stringMap, 0.5);
 
-    // Benchmark all three approaches
-    const stringResult = benchmark.benchmarkCompression(stringMap, selectedOptions, 'StringMap', { iterations: 1000 });
-    const numberResult = benchmark.benchmarkCompression(numberMap, selectedOptions, 'NumberMap', { iterations: 1000 });
-    const arrayResult = benchmark.benchmarkCompression(arrayMap, selectedOptions, 'ArrayMap', { iterations: 1000 });
+      // Benchmark all three approaches
+      const stringResult = benchmark.benchmarkCompression(stringMap, selectedOptions, 'StringMap', { iterations: 1000 });
+      const numberResult = benchmark.benchmarkCompression(numberMap, selectedOptions, 'NumberMap', { iterations: 1000 });
+      const arrayResult = benchmark.benchmarkCompression(arrayMap, selectedOptions, 'ArrayMap', { iterations: 1000 });
 
-    // Print comparative results
-    console.log('\nPerformance Comparison:');
-    console.log(`String Map: ${stringResult.executionTime.toFixed(4)}ms, ${stringResult.throughput.toFixed(2)} ops/ms`);
-    console.log(`Number Map: ${numberResult.executionTime.toFixed(4)}ms, ${numberResult.throughput.toFixed(2)} ops/ms`);
-    console.log(`Array Map: ${arrayResult.executionTime.toFixed(4)}ms, ${arrayResult.throughput.toFixed(2)} ops/ms`);
+      // Print comparative results
+      console.log('\nPerformance Comparison:');
+      console.log(`String Map: ${stringResult.executionTime.toFixed(4)}ms, ${stringResult.throughput.toFixed(2)} ops/ms`);
+      console.log(`Number Map: ${numberResult.executionTime.toFixed(4)}ms, ${numberResult.throughput.toFixed(2)} ops/ms`);
+      console.log(`Array Map: ${arrayResult.executionTime.toFixed(4)}ms, ${arrayResult.throughput.toFixed(2)} ops/ms`);
 
-    expect(stringResult.executionTime).toBeGreaterThan(0);
-    expect(numberResult.executionTime).toBeGreaterThan(0);
-    expect(arrayResult.executionTime).toBeGreaterThan(0);
+      expect(stringResult.executionTime).toBeGreaterThan(0);
+      expect(numberResult.executionTime).toBeGreaterThan(0);
+      expect(arrayResult.executionTime).toBeGreaterThan(0);
+    });
   });
-}, 120000); // Increase timeout for performance tests
+}, { timeout: 120000 }); // Increase timeout for performance tests
 
 // Export the benchmark class for external use
 export { PerformanceBenchmark, type PerformanceResult, type BenchmarkOptions };
