@@ -43,9 +43,10 @@ export function getValueFromKeyIndex(
   keyIndex: number,
   keys: (string | number)[],
   getValue: (key: string | number) => string
-): string {
+): string | undefined {
   if (keyIndex < 0 || keyIndex >= keys.length) {
     console.error(`Key index ${keyIndex} is out of bounds for the keys array.`);
+    return undefined;
   }
   const key = keys[keyIndex];
   const value = getValue(key);

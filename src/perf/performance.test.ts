@@ -3,6 +3,8 @@ import { compressOptions } from '../compression/index.js';
 import { decompressOptions } from '../decompression/index.js';
 import type { OptionMap, SelectedOptions } from '../types/types.js';
 
+const logDetail = false; // Set to true for detailed logging of each individual test case including memory usage
+
 interface PerformanceResult {
   operation: string;
   dataSize: string;
@@ -226,6 +228,10 @@ class PerformanceBenchmark {
 
   // Print formatted results
   printResults(): void {
+    if (!logDetail) {
+      return;
+    }
+
     console.log('\n=== Performance Benchmark Results ===\n');
 
     this.results.forEach(result => {
@@ -437,11 +443,13 @@ describe('Performance Benchmarks', () => {
       const numberResult = benchmark.benchmarkCompression(numberMap, selectedOptions, 'NumberMap', { iterations: 1000, measureMemory: true });
       const arrayResult = benchmark.benchmarkCompression(arrayMap, selectedOptions, 'ArrayMap', { iterations: 1000, measureMemory: true });
 
-      // Print comparative results
-      console.log('\nPerformance Comparison:');
-      console.log(`String Map: ${stringResult.executionTime.toFixed(4)}ms, ${stringResult.throughput.toFixed(2)} ops/ms, ${((stringResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
-      console.log(`Number Map: ${numberResult.executionTime.toFixed(4)}ms, ${numberResult.throughput.toFixed(2)} ops/ms, ${((numberResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
-      console.log(`Array Map: ${arrayResult.executionTime.toFixed(4)}ms, ${arrayResult.throughput.toFixed(2)} ops/ms, ${((arrayResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
+      // Print comparative results if set to logDetail
+      if (logDetail) {
+        console.log('\nPerformance Comparison:');
+        console.log(`String Map: ${stringResult.executionTime.toFixed(4)}ms, ${stringResult.throughput.toFixed(2)} ops/ms, ${((stringResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
+        console.log(`Number Map: ${numberResult.executionTime.toFixed(4)}ms, ${numberResult.throughput.toFixed(2)} ops/ms, ${((numberResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
+        console.log(`Array Map: ${arrayResult.executionTime.toFixed(4)}ms, ${arrayResult.throughput.toFixed(2)} ops/ms, ${((arrayResult.memoryUsage || 0) / 1024).toFixed(2)}KB`);
+      }
 
       expect(stringResult.executionTime).toBeGreaterThan(0);
       expect(numberResult.executionTime).toBeGreaterThan(0);
