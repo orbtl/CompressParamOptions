@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { compressOptions } from './compression.js';
-import { decompressOptions } from './decompression.js';
-import type { OptionMap, SelectedOptions } from './types/types.js';
+import { compressOptions } from '../compression/index.js';
+import { decompressOptions } from '../decompression/index.js';
+import type { OptionMap, SelectedOptions } from '../types/types.js';
 
 interface PerformanceResult {
   operation: string;

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { compressOptions } from './compression.js';
-import type { StringOptionMap, NumberOptionMap, ArrayOptionMap } from './types/types.js';
-import { CompressionOptions } from './types/types.js';
+import { compressOptions } from './index.js';
+import type { StringOptionMap, NumberOptionMap, ArrayOptionMap } from '../types/types.js';
+import { CompressionOptions } from '../types/types.js';
 
 describe('compressOptions', () => {
   describe('StringOptionMap', () => {

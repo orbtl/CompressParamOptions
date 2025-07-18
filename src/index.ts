@@ -11,7 +11,7 @@ export type {
 export { CompressionOptions, DecompressionOptions } from './types/types.js';
 
 // Re-export compression functionality
-export { compressOptions } from './compression.js';
+export { compressOptions } from './compression/index.js';
 
 // Re-export decompression functionality
-export { decompressOptions } from './decompression.js';
+export { decompressOptions } from './decompression/index.js';

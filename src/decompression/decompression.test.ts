@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { decompressOptions } from './decompression.js';
-import type { StringOptionMap, NumberOptionMap, ArrayOptionMap } from './types/types.js';
+import { decompressOptions } from './index.js';
+import type { StringOptionMap, NumberOptionMap, ArrayOptionMap } from '../types/types.js';
 
 describe('decompressOptions', () => {
   describe('StringOptionMap', () => {
