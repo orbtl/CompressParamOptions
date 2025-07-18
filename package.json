@@ -1,6 +1,6 @@
 {
   "name": "compress-param-options",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Compress large amounts of URL param options for shareable links",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/orbtl/CompressParamOptions#readme",
   "devDependencies": {
+    "@types/node": "^24.0.14",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }
