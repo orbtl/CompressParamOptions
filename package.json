@@ -1,6 +1,6 @@
 {
   "name": "compress-param-options",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Compress large amounts of URL param options for shareable links",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "build": "tsc",
+    "build": "tsc -b --clean",
     "ci": "npm run build && npm run test"
   },
   "repository": {
