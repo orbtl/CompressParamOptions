@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "build": "tsc -b --clean",
+    "build": "tsc --build --clean && tsc",
     "ci": "npm run build && npm run test"
   },
   "repository": {
