@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { compressOptions } from './compression.js';
 import type { StringOptionMap, NumberOptionMap, ArrayOptionMap } from './types/types.js';
+import { CompressionOptions } from './types/types.js';
 
 describe('compressOptions', () => {
   describe('StringOptionMap', () => {
@@ -31,14 +32,16 @@ describe('compressOptions', () => {
 
     it('should handle uncompressed options when includeUncompressed is true', () => {
       const selected = new Set(['value1', 'unknown_option']);
-      const result = compressOptions(stringOptions, selected, true, false);
+      const options = new CompressionOptions(true, false);
+      const result = compressOptions(stringOptions, selected, options);
       expect(result).toBe('W,unknown_option'); // Binary: 100000 -> 32 (decimal) -> 'W', then separator and unknown option
     });
 
     it('should warn about uncompressed options when warnOnUncompressed is true', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
       const selected = new Set(['value1', 'unknown_option']);
-      compressOptions(stringOptions, selected, false, true);
+      const options = new CompressionOptions(false, true);
+      compressOptions(stringOptions, selected, options);
       expect(consoleSpy).toHaveBeenCalledWith(
         'The following options are not in the optionMap and cannot be compressed:',
         ['unknown_option']
@@ -105,7 +108,8 @@ describe('compressOptions', () => {
 
     it('should handle uncompressed options', () => {
       const selected = new Set(['red', 'purple']);
-      const result = compressOptions(arrayOptions, selected, true, false);
+      const options = new CompressionOptions(true, false);
+      const result = compressOptions(arrayOptions, selected, options);
       expect(result).toBe('W,purple'); // Binary: 100000 -> 32 (decimal) -> 'W', then separator and unknown option
     });
   });

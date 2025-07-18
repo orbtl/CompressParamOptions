@@ -7,6 +7,9 @@ export type {
   ArrayOptionMap
 } from './types/types.js';
 
+// Re-export classes
+export { CompressionOptions, DecompressionOptions } from './types/types.js';
+
 // Re-export compression functionality
 export { compressOptions } from './compression.js';
 

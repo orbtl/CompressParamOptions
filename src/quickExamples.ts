@@ -1,5 +1,6 @@
 import { compressOptions, decompressOptions } from './index.js';
 import type { StringOptionMap, NumberOptionMap, ArrayOptionMap, SelectedOptions } from './types/types.js';
+import { CompressionOptions } from './types/types.js';
 
 console.log('=== EXAMPLE 1: User Preferences (50 options) ===');
 const userPreferences: StringOptionMap = {
@@ -238,7 +239,7 @@ const basicOptions: StringOptionMap = {
 };
 
 const mixedSelection: SelectedOptions = new Set(['option_one', 'option_three', 'custom_option_not_in_map', 'another_custom']);
-const compressedMixed: string = compressOptions(basicOptions, mixedSelection, true, true);
+const compressedMixed: string = compressOptions(basicOptions, mixedSelection, new CompressionOptions(true, true));
 console.log('Mixed selection (with uncompressed):', compressedMixed, '(length:', compressedMixed.length, ')');
 const decompressedMixed: SelectedOptions = decompressOptions(basicOptions, compressedMixed);
 console.log('Decompressed mixed:', decompressedMixed);

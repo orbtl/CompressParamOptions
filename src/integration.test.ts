@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { compressOptions, decompressOptions } from './index.js';
 import type { StringOptionMap, NumberOptionMap, ArrayOptionMap } from './types/types.js';
+import { CompressionOptions } from './types/types.js';
 
 describe('Integration Tests - Compression and Decompression', () => {
   describe('Round-trip tests', () => {
@@ -150,7 +151,8 @@ describe('Integration Tests - Compression and Decompression', () => {
       };
       
       const originalSelected = new Set(['option1', 'unknown_option', 'option3']);
-      const compressed = compressOptions(options, originalSelected, true, false);
+      const compressionOptions = new CompressionOptions(true, false);
+      const compressed = compressOptions(options, originalSelected, compressionOptions);
       const decompressed = decompressOptions(options, compressed);
       
       expect(decompressed).toEqual(originalSelected);
@@ -160,7 +162,8 @@ describe('Integration Tests - Compression and Decompression', () => {
       const options: ArrayOptionMap = ['red', 'blue', 'green'];
       
       const originalSelected = new Set(['red', 'purple', 'orange', 'green']);
-      const compressed = compressOptions(options, originalSelected, true, false);
+      const compressionOptions = new CompressionOptions(true, false);
+      const compressed = compressOptions(options, originalSelected, compressionOptions);
       const decompressed = decompressOptions(options, compressed);
       
       expect(decompressed).toEqual(originalSelected);
@@ -173,7 +176,8 @@ describe('Integration Tests - Compression and Decompression', () => {
       };
       
       const originalSelected = new Set(['unknown1', 'unknown2']);
-      const compressed = compressOptions(options, originalSelected, true, false);
+      const compressionOptions = new CompressionOptions(true, false);
+      const compressed = compressOptions(options, originalSelected, compressionOptions);
       const decompressed = decompressOptions(options, compressed);
       
       expect(decompressed).toEqual(originalSelected);
