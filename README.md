@@ -1,6 +1,9 @@
 # Compress Param Options
 A package for compressing large amounts of URL param options into a shorter, consistent format that can be used for sharing links that include all of the selected options
 
+## Demo
+Please visit https://github.com/orbtl/CompressParamOptionsDemo for a simple react demo showcasing how this package might be utilized
+
 ## Installation
 - Add this package to your project with `npm i compress-param-options`
 - Import compression and decompression functions with `import { compressOptions, decompressOptions } from 'compress-param-options';`
